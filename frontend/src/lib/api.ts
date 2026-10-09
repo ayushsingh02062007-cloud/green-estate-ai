@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+﻿import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useApp } from "@/store/app";
 
 export class ApiError extends Error { constructor(public status: number, message: string) { super(message); } }
@@ -8,7 +8,7 @@ export async function api<T = any>(path: string, opts: { method?: string; body?:
   const q = new URLSearchParams();
   if (opts.facility !== false) q.set("facility", facility);
   Object.entries(opts.params ?? {}).forEach(([k, v]) => v !== undefined && q.set(k, String(v)));
-  const res = await fetch(`/api/v1${path}?${q}`, {
+  const res = await fetch(`${import.meta.env.PROD ? "https://estateiq-api-ufa1.onrender.com" : ""}/api/v1${path}?${q}`, {
     method: opts.method ?? "GET",
     headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(opts.body ? { "Content-Type": "application/json" } : {}) },
     body: opts.form ?? (opts.body ? JSON.stringify(opts.body) : undefined),
