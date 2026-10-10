@@ -15,7 +15,7 @@ export default function Scorecard() {
   const v = useQ<any>("/scorecard");
   const hist = useMemo(() => v.data ? catChart([...v.data.history].reverse().map((h: any) => h.label), [bar("Overall score", [...v.data.history].reverse().map((h: any) => h.overall), { color: palette().brand })], { yAxis: { type: "value", min: 0, max: 100 } }) : {}, [v.data]);
   async function download() {
-    const r = await fetch(`/api/v1/reports/export?kind=scorecard&facility=${facility}`, { headers: { Authorization: `Bearer ${token}` } });
+    const r = await fetch(`${import.meta.env.PROD ? "https://green-estate-ai.onrender.com" : ""}/api/v1/reports/export?kind=scorecard&facility=${facility}`, { headers: { Authorization: `Bearer ${token}` } });
     const a = document.createElement("a"); a.href = URL.createObjectURL(await r.blob()); a.download = `${facility}_scorecard.csv`; a.click();
   }
   const c = v.data?.current;
@@ -36,3 +36,4 @@ export default function Scorecard() {
     </>
   );
 }
+
